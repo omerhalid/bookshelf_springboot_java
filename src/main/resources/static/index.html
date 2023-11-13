@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book API</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        body {
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        #books {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Book API</h1>
+
+    <div class="card">
+        <div class="card-body">
+            <h2>Add a new book</h2>
+            <form id="add-book-form">
+                <div class="form-group">
+                    <label for="bookname">Book Name:</label>
+                    <input type="text" id="bookname" name="bookname" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="author">Author:</label>
+                    <input type="text" id="author" name="author" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="rating">Rating:</label>
+                    <input type="number" id="rating" name="rating" min="1" max="10" class="form-control">
+                </div>
+                <input type="submit" value="Submit" class="btn btn-primary">
+            </form>
+        </div>
+    </div>
+
+    <div id="books" class="mt-5">
+        <h2>All Books</h2>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Fetch all books
+            function fetchBooks() {
+                $.get("/api/books", function(data) {
+                    $('#books').append('<ul class="list-group">');
+                    data.forEach(function(book) {
+                        $("#books ul").append("<li class='list-group-item'>" + book.bookname + " by " + book.author + " (Rating: " + book.rating + ")</li>");
+                    });
+                    $('#books').append('</ul>');
+                });
+            }
+            fetchBooks();
+
+            // Add a new book
+            $("#add-book-form").submit(function(event) {
+                event.preventDefault();
+                var book = {
+                    bookname: $("#bookname").val(),
+                    author: $("#author").val(),
+                    rating: $("#rating").val()
+                };
+                $.ajax({
+                    url: '/api/books',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(book),
+                    success: function(response) {
+                        alert("Book added successfully!");
+                        // Clear form
+                        $('#add-book-form').trigger("reset");
+                        // Update book list
+                        $("#books ul").append("<li class='list-group-item'>" + book.bookname + " by " + book.author + " (Rating: " + book.rating + ")</li>");
+                    },
+                    error: function(xhr, status, error) {
+                        alert("An error occurred: " + xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
