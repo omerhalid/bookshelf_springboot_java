@@ -7,12 +7,28 @@
     <style>
         body {
             padding: 20px;
+            background-color: #f8f9fa; /* Light gray background */
         }
-        .form-group {
-            margin-bottom: 15px;
+        .card {
+            border-color: #007bff; /* Blue border for the card */
         }
-        #books {
-            margin-top: 20px;
+        .card-header {
+            background-color: #007bff; /* Blue header */
+            color: white; /* White text for contrast */
+        }
+        .card-body {
+            background-color: #ffffff; /* White body */
+        }
+        .btn-primary {
+            background-color: #28a745; /* Green button */
+            border-color: #28a745; /* Green border for button */
+        }
+        #books h2 {
+            color: #343a40; /* Darker text for the heading */
+        }
+        .list-group-item {
+            background-color: #e9ecef; /* Lighter background for list items */
+            border: 1px solid #dee2e6; /* Slight border for definition */
         }
     </style>
 </head>
@@ -20,8 +36,10 @@
     <h1>Book API</h1>
 
     <div class="card">
+        <div class="card-header">
+            Add a new book
+        </div>
         <div class="card-body">
-            <h2>Add a new book</h2>
             <form id="add-book-form">
                 <div class="form-group">
                     <label for="bookname">Book Name:</label>
