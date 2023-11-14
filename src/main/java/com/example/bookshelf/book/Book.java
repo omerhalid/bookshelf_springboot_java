@@ -18,7 +18,7 @@ public class Book {
     private int rating;
 
     //Constructor with no arguments
-    Book() {
+    public Book() {
     }
 
     //Constructor with arguments
