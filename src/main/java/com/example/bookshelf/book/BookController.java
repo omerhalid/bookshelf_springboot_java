@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.bookshelf.book.OpenLibraryService.OpenLibraryResponse;
+
 import java.util.List;
 import java.util.Map;
 
@@ -37,10 +39,18 @@ public class BookController {
         bookService.addBook(book);
     }
 
-    //(so it needs to be back to @RequstMapping)
-    @PostMapping("/search")  
-    public String searchBooks(@RequestBody Map<String, String> body) { //change this back to @RequestParam. 
-        String title = body.get("title");
+    @RequestMapping("/search")
+    public OpenLibraryResponse searchBooks(@RequestParam String title) {
+        title = title.replace(" ", "+");
         return openLibraryService.searchBook(title);
+    }
+
+    @RequestMapping("/is-present")
+    public void isBookPresent(@RequestParam String title) {
+        if(openLibraryService.isBookPresent(title)){
+            System.out.println("Book is present");
+        } else {
+            System.out.println("Book is not present");
+        }
     }
 }
