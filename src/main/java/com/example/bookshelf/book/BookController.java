@@ -46,11 +46,13 @@ public class BookController {
     }
 
     @RequestMapping("/is-present")
-    public void isBookPresent(@RequestParam String title) {
+    public Boolean isBookPresent(@RequestParam String title) {
         if(openLibraryService.isBookPresent(title)){
-            System.out.println("Book is present");
+            return true; 
         } else {
-            System.out.println("Book is not present");
+            return false;
         }
     }
+
+    //fixed the index.html
 }

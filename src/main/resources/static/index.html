@@ -84,20 +84,29 @@
                     author: $("#author").val(),
                     rating: $("#rating").val()
                 };
-                $.ajax({
-                    url: '/api/books',
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify(book),
-                    success: function(response) {
-                        alert("Book added successfully!");
-                        // Clear form
-                        $('#add-book-form').trigger("reset");
-                        // Update book list
-                        $("#books ul").append("<li class='list-group-item'>" + book.bookname + " by " + book.author + " (Rating: " + book.rating + ")</li>");
-                    },
-                    error: function(xhr, status, error) {
-                        alert("An error occurred: " + xhr.responseText);
+                // Check if book exists
+                $.get("/api/books/is-present", { title: book.bookname }, function(data) {
+                    if (data) {
+                        // If the book exists in the OpenLibrary API, add it
+                        $.ajax({
+                            url: '/api/books',
+                            type: 'POST',
+                            contentType: 'application/json',
+                            data: JSON.stringify(book),
+                            success: function(response) {
+                                alert("Book added successfully!. It is present in the OpenLibrary API and has been added to the database.");
+                                // Clear form
+                                $('#add-book-form').trigger("reset");
+                                // Update book list
+                                $("#books ul").append("<li class='list-group-item'>" + book.bookname + " by " + book.author + " (Rating: " + book.rating + ")</li>");
+                            },
+                            error: function(xhr, status, error) {
+                                alert("An error occurred: " + xhr.responseText);
+                            }
+                        });
+                    } else {
+                        // If the book does not exist in the OpenLibrary API, do not add it
+                        alert("This book does not exist in the OpenLibrary API!");
                     }
                 });
             });
